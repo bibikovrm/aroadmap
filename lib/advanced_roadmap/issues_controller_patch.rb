@@ -8,8 +8,9 @@ module AdvancedRoadmap
       protected
   
         def render(options = nil, extra_options = {}, &block)
-          if @action_name == "show" and
-             !User.current.allowed_to?(:view_issue_estimated_hours, @project)
+          if ((@action_name == "show") and
+              (!(User.current.allowed_to?(:view_issue_estimated_hours, @project))) and
+              (!(@journals.nil?)))
             @journals.each do |journal|
               journal.details.delete_if{|detail| detail.prop_key == "estimated_hours"}
             end
