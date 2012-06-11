@@ -25,4 +25,4 @@
 <p class="nodata"><%= l(:label_no_data) %></p>
 <% end %>
 
-<p><%= link_to_if_authorized l(:label_milestone_new), :controller => :milestones, :action => :add, :id => @project.id %></p>
+<p><%= link_to_if_authorized l(:label_milestone_new), {:controller => :milestones, :action => :add, :project_id => @project} %></p>

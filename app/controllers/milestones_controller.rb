@@ -27,7 +27,6 @@ class MilestonesController < ApplicationController
   end
   
   def add
-    @project = Project.find(params[:id])
     @projects = Project.find(:all).sort { |a, b| a.name.downcase <=> b.name.downcase }
     @versions = @project.versions
     @milestone = @project.milestones.build(params[:milestone])
@@ -111,7 +110,7 @@ class MilestonesController < ApplicationController
 private
 
   def find_project
-    @project = Project.find(params[:id])
+    @project = Project.find(params[:project_id])
   rescue ActiveRecord::RecordNotFound
     render_404
   end
