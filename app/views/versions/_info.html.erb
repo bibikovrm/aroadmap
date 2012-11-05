@@ -104,8 +104,8 @@
           color = color_by_ratio(issue_spent_hours / ((issue_estimated_hours * issue_done_ratio) / 100.0))
         end
         if issue.closed?
-          begin_strike = "<strike>"
-          end_strike = "</strike>"
+          begin_strike = "<strike>".html_safe
+          end_strike = "</strike>".html_safe
         end -%>
     <tr class="hascontextmenu <%= cycle("odd", "even") %>\">
       <%- tab = "&nbsp;" * 3 * issue.parents_count -%>
