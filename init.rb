@@ -1,46 +1,37 @@
+# encoding: UTF-8
+
 # This plugin should be reloaded in development mode.
-if RAILS_ENV == "development"
-  ActiveSupport::Dependencies.load_once_paths.reject!{|x| x =~ /^#{Regexp.escape(File.dirname(__FILE__))}/}
+if (Rails.env == "development")
+  ActiveSupport::Dependencies.autoload_once_paths.reject!{|x| x =~ /^#{Regexp.escape(File.dirname(__FILE__))}/}
 end
 
 require "redmine"
 require "rubygems"
 require "gravatar"
-require "dispatcher"
-require_dependency File.dirname(File.dirname(__FILE__)) + "/awesome_nested_set/rails/init"
-Dispatcher.to_prepare do 
-  begin
-    require_dependency "application"
-  rescue LoadError
-    require_dependency "application_controller"
-  end
 
-  ApplicationHelper.send(:include, AdvancedRoadmap::ApplicationHelperPatch)
-  CalendarsController.send(:include, AdvancedRoadmap::CalendarsControllerPatch)
-  Issue.send(:include, AdvancedRoadmap::IssuePatch)
-  IssuesController.send(:include, AdvancedRoadmap::IssuesControllerPatch)
-  Project.send(:include, AdvancedRoadmap::ProjectPatch)
-  ProjectsHelper.send(:include, AdvancedRoadmap::ProjectsHelperPatch)
-  Query.send(:include, AdvancedRoadmap::QueryPatch)
-  Redmine::Helpers::Gantt.send(:include, AdvancedRoadmap::RedmineHelpersGanttPatch)
-  Redmine::I18n.send(:include, AdvancedRoadmap::RedmineI18nPatch)
-  Version.send(:include, AdvancedRoadmap::VersionPatch)
-  VersionsController.send(:include, AdvancedRoadmap::VersionsControllerPatch)
-end
+ApplicationHelper.send(:include, AdvancedRoadmap::ApplicationHelperPatch)
+CalendarsController.send(:include, AdvancedRoadmap::CalendarsControllerPatch)
+Issue.send(:include, AdvancedRoadmap::IssuePatch)
+IssuesController.send(:include, AdvancedRoadmap::IssuesControllerPatch)
+Project.send(:include, AdvancedRoadmap::ProjectPatch)
+ProjectsHelper.send(:include, AdvancedRoadmap::ProjectsHelperPatch)
+Query.send(:include, AdvancedRoadmap::QueryPatch)
+Redmine::Helpers::Gantt.send(:include, AdvancedRoadmap::RedmineHelpersGanttPatch)
+Redmine::I18n.send(:include, AdvancedRoadmap::RedmineI18nPatch)
+Version.send(:include, AdvancedRoadmap::VersionPatch)
+VersionsController.send(:include, AdvancedRoadmap::VersionsControllerPatch)
 
 require_dependency "advanced_roadmap/view_hooks"
 
-RAILS_DEFAULT_LOGGER.info "Advanced roadmap & milestones plugin for RedMine"
-
 Redmine::Plugin.register :advanced_roadmap do
   name "Advanced roadmap & milestones plugin"
-  url "https://ociotec.com/redmine/projects/advanced-roadmap"
+  url "https://redmine.ociotec.com/projects/advanced-roadmap"
   author "Emilio González Montaña"
   author_url "http://ociotec.com"
   description "This is a plugin for Redmine that is used to show more information inside the Roadmap page and implements the milestones featuring."
-  version "0.7.0"
-  permission :manage_milestones, {:milestones => [:add, :edit, :destroy]}
-  requires_redmine :version_or_higher => "1.4.0"
+  version "0.8.0"
+  permission :manage_milestones, {:milestones => [:new, :create, :edit, :update, :destroy]}
+  requires_redmine :version_or_higher => "2.1.2"
 
   project_module :issue_tracking do
     permission :view_issue_estimated_hours, {}

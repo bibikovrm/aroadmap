@@ -1,6 +1,6 @@
 <tr>
     <%- milestones = @issue.fixed_version ? @issue.fixed_version.milestones.sort : []
-        milestones = milestones.collect {|m| link_to(m.name, {:controller => :milestones, :action => :show, :id => m.id})}.join(", ") -%>
+        milestones = milestones.collect {|m| link_to(m.name, {:controller => :milestones, :action => :show, :id => m.id})}.join(", ").html_safe -%>
     <th class="fixed-version"><%=l(:label_milestone_plural)%>:</th>
     <td class="fixed-version"><%= milestones %></td>
     <%- if @issue.rest_hours > 0 &&

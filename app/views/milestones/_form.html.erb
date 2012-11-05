@@ -36,8 +36,11 @@
           }
         }
       }
+      jQuery(function($)
+      {
+        $(\"#project_selector\").change(project_change);
+      })
     <% end %>
-    <%= observe_field("project_selector", :function => "project_changed()") %>
   </p>
   <% @projects.each do |project| %>
     <div id="project_<%= project.id %>_versions"<%= (@project == project) ? "" : "style=\"display: none; visibility: hidden;\"" %>>
@@ -56,7 +59,7 @@
             </td>
             <td align="center"><%= version.effective_date %></td>
             <td><%= version.description %></td>
-            <td align="center"><%= version.milestones.collect {|m| link_to(h(m.name), :controller => :milestones, :action => :show, :id => m.id) }.join(", ") %></td>
+            <td align="center"><%= version.milestones.collect {|m| link_to(h(m.name), :controller => :milestones, :action => :show, :id => m.id) }.join(", ").html_safe %></td>
           <tr>
         <% end %>
       </table>

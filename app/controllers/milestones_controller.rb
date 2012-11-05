@@ -3,8 +3,8 @@ require "advanced_roadmap/gruff/pie"
 class MilestonesController < ApplicationController
   
   menu_item :roadmap
-  before_filter :find_project, :only => [:add]
-  before_filter :find_milestone, :except => [:add, :total_graph]
+  before_filter :find_project, :only => [:new, :create]
+  before_filter :find_milestone, :only => [:show, :edit, :update, :destroy]
   before_filter :authorize, :except => [:show, :total_graph]
 
   helper :custom_fields
@@ -26,9 +26,15 @@ class MilestonesController < ApplicationController
     @totals = Version.calculate_totals(@milestone.versions)
   end
   
-  def add
+  def new
     @projects = Project.find(:all).sort { |a, b| a.name.downcase <=> b.name.downcase }
     @versions = @project.versions
+    @milestone = Milestone.new
+  rescue ActiveRecord::RecordNotFound
+    render_404
+  end
+  
+  def create
     @milestone = @project.milestones.build(params[:milestone])
     @milestone.user_id = User.current.id
     if request.post? and @milestone.save
@@ -50,21 +56,24 @@ class MilestonesController < ApplicationController
   def edit
     @projects = Project.find(:all).sort { |a, b| a.name.downcase <=> b.name.downcase }
     @versions = @project.versions
-    if request.post?
-      versions_to_delete = @milestone.versions
-      versions_to_add = []
-      if params[:versions]
-        params[:versions].each do |version|
-          index = @milestone.versions.index(version)
-          if index != nil
-            versions_to_delete.remove(index)
-          else
-            versions_to_add << version
-          end
+  end
+
+  def update
+    @projects = Project.find(:all).sort { |a, b| a.name.downcase <=> b.name.downcase }
+    @versions = @project.versions
+    versions_to_delete = @milestone.versions
+    versions_to_add = []
+    if params[:versions]
+      params[:versions].each do |version|
+        index = @milestone.versions.index(version)
+        if index != nil
+          versions_to_delete.remove(index)
+        else
+          versions_to_add << version
         end
       end
     end
-    if request.post? and @milestone.update_attributes(params[:milestone])
+    if @milestone.update_attributes(params[:milestone])
       versions_to_delete.each do |version|
         milestone_version = MilestoneVersion.find(:first, :conditions => "milestone_id = #{@milestone.id} AND version_id = #{version.id}")
         milestone_version.destroy
@@ -111,12 +120,12 @@ private
 
   def find_project
     @project = Project.find(params[:project_id])
-  rescue ActiveRecord::RecordNotFound
+  rescue ActiveRecord::RecordNotFound
     render_404
   end
 
   def find_milestone
-    @milestone = Milestone.find(params[:id])
+   @milestone = Milestone.find(params[:id])
     @project = @milestone.project
   rescue ActiveRecord::RecordNotFound
     render_404
