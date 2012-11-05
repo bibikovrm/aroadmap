@@ -57,7 +57,7 @@
 
 <%- if issues.present? -%>
 <fieldset class="related-issues"><legend><%= l(:label_related_issues) %></legend>
-<% form_tag({}) do %>
+<%= form_tag({}) do %>
 <table class="list related-issues">
   <thead>
     <%- width = 73
