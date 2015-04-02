@@ -10,7 +10,7 @@
         <option<%= (project == @project) ? " selected" : "" %> id="<%= project.id %>"><%= h(project.name) %></option>
       <% end %>
     </select>
-    <% javascript_tag :defer => "defer" do %>
+    <%= javascript_tag :defer => "defer" do %>
       function project_changed()
       {
         object = window.document.getElementById("project_selector");
@@ -19,14 +19,14 @@
           if (object.selectedIndex != -1)
           {
             project_id = object.options[object.selectedIndex].id;
-            <% @projects.each do |project| %>
+            <%- @projects.each do |project| -%>
               project_div = window.document.getElementById("project_<%= project.id %>_versions");
               if (project_div)
               {
                 project_div.style.display = "none";
                 project_div.style.visibility = "hidden";
               }
-            <% end %>
+            <%- end -%>
             project_div = window.document.getElementById("project_" + project_id + "_versions");
             if (project_div)
             {
@@ -38,12 +38,16 @@
       }
       jQuery(function($)
       {
-        $(\"#project_selector\").change(project_change);
+        $("#project_selector").change(project_changed);
       })
     <% end %>
   </p>
   <% @projects.each do |project| %>
-    <div id="project_<%= project.id %>_versions"<%= (@project == project) ? "" : "style=\"display: none; visibility: hidden;\"" %>>
+    <div id="project_<%= project.id %>_versions"
+      <%- if (@project != project) -%>
+        style="display: none; visibility: hidden;"
+      <%- end -%>
+    >
       <table class="list">
         <thead>
           <th><%= l(:field_version) %></th>

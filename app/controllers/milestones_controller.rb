@@ -9,8 +9,10 @@ class MilestonesController < ApplicationController
 
   helper :custom_fields
   helper :projects
+  helper :versions
   include CustomFieldsHelper
   include ProjectsHelper
+  include VersionsHelper
    
   def show
     projects = {}
@@ -120,12 +122,12 @@ private
 
   def find_project
     @project = Project.find(params[:project_id])
-  rescue ActiveRecord::RecordNotFound
+  rescue ActiveRecord::RecordNotFound
     render_404
   end
 
   def find_milestone
-   @milestone = Milestone.find(params[:id])
+    @milestone = Milestone.find(params[:id])
     @project = @milestone.project
   rescue ActiveRecord::RecordNotFound
     render_404
