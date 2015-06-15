@@ -1,3 +1,12 @@
+# encoding: UTF-8
+
+# Copyright © Emilio González Montaña
+# Licence: Attribution & no derivates
+#   * Attribution to the plugin web page URL should be done if you want to use it.
+#     https://redmine.ociotec.com/projects/advanced-roadmap
+#   * No derivates of this plugin (or partial) are allowed.
+# Take a look to licence.txt file at plugin root folder for further details.
+
 require_dependency "version"
 
 module AdvancedRoadmap
@@ -8,17 +17,17 @@ module AdvancedRoadmap
         has_many :milestone_versions, :dependent => :destroy
         has_many :milestones, :through => :milestone_versions
   
-        def completed_pourcent_with_advanced_info
+        def completed_percent_with_advanced_info
           calculate_advance_info unless @total_ratio
           @total_ratio
         end
-        alias_method_chain :completed_pourcent, :advanced_info
+        alias_method_chain :completed_percent, :advanced_info
   
-        def closed_pourcent_with_advanced_info
+        def closed_percent_with_advanced_info
           calculate_advance_info unless @total_finished_ratio
           @total_finished_ratio
         end
-        alias_method_chain :closed_pourcent, :advanced_info
+        alias_method_chain :closed_percent, :advanced_info
   
         def rest_hours
           calculate_advance_info unless @total_pending
@@ -102,10 +111,10 @@ module AdvancedRoadmap
           issues = []
           conditions = {:parent_id => options[:parent]}
           conditions[:tracker_id] = options[:trackers] if options[:trackers]
-          fixed_issues.visible.find(:all,
-                                    :conditions => conditions,
-                                    :include => [:status, :tracker, :priority],
-                                    :order => "#{Tracker.table_name}.position, #{Issue.table_name}.subject").each do |issue|
+          fixed_issues.visible
+              .where(conditions)
+              .includes([:status, :tracker, :priority])
+              .order("#{Tracker.table_name}.position, #{Issue.table_name}.subject").each do |issue|
             issues << issue
             issues += sorted_fixed_issues(options.merge(:parent => issue))
           end
@@ -116,7 +125,7 @@ module AdvancedRoadmap
           factor = 1.0
           if !(custom_field = CustomField.find_by_id(Setting.plugin_advanced_roadmap["parallel_effort_custom_field"].to_i)).nil? and
              custom_field.field_format == "float"
-            if !(custom_value = CustomValue.find(:first, :conditions => {:customized_type => "Version", :customized_id => id, :custom_field_id => custom_field.id})).nil?
+            if !(custom_value = CustomValue.where(:customized_type => "Version", :customized_id => id, :custom_field_id => custom_field.id).first).nil?
               factor = custom_value.value.to_f
             else
               factor = custom_field.default_value.to_f
@@ -140,7 +149,7 @@ module AdvancedRoadmap
         end
   
         def self.sort_versions(versions)
-          versions.sort!{|a, b|
+          versions = versions.sort {|a, b|
             if !a.effective_date.nil? and !b.effective_date.nil?
               a.effective_date <=> b.effective_date
             elsif a.effective_date.nil? and !b.effective_date.nil?

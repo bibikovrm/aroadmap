@@ -1,10 +1,25 @@
+# encoding: UTF-8
+
+# Copyright © Emilio González Montaña
+# Licence: Attribution & no derivates
+#   * Attribution to the plugin web page URL should be done if you want to use it.
+#     https://redmine.ociotec.com/projects/advanced-roadmap
+#   * No derivates of this plugin (or partial) are allowed.
+# Take a look to licence.txt file at plugin root folder for further details.
+
 require "advanced_roadmap/gruff/pie"
 
 class MilestonesController < ApplicationController
   
   menu_item :roadmap
-  before_filter :find_project, :only => [:new, :create]
-  before_filter :find_milestone, :only => [:show, :edit, :update, :destroy]
+  model_object Milestone
+
+  before_filter :find_model_object,
+                :only => [:show, :edit, :update, :destroy]
+  before_filter :find_project_from_association,
+                :only => [:show, :edit, :update, :destroy]
+  before_filter :find_project_by_project_id,
+                :only => [:new, :create]
   before_filter :authorize, :except => [:show, :total_graph]
 
   helper :custom_fields
@@ -29,7 +44,7 @@ class MilestonesController < ApplicationController
   end
   
   def new
-    @projects = Project.find(:all).sort { |a, b| a.name.downcase <=> b.name.downcase }
+    @projects = Project.all.sort { |a, b| a.name.downcase <=> b.name.downcase }
     @versions = @project.versions
     @milestone = Milestone.new
   rescue ActiveRecord::RecordNotFound
@@ -51,17 +66,18 @@ class MilestonesController < ApplicationController
       flash[:notice] = l(:notice_successful_create)
       redirect_to :controller => :projects, :action => :settings, :tab => "milestones", :id => @project
     end
-  rescue ActiveRecord::RecordNotFound
+  rescue ActiveRecord::RecordNotFound => e
+    puts("%%% excepcion: #{e.inspect}")
     render_404
   end
   
   def edit
-    @projects = Project.find(:all).sort { |a, b| a.name.downcase <=> b.name.downcase }
+    @projects = Project.all.sort { |a, b| a.name.downcase <=> b.name.downcase }
     @versions = @project.versions
   end
 
   def update
-    @projects = Project.find(:all).sort { |a, b| a.name.downcase <=> b.name.downcase }
+    @projects = Project.all.sort { |a, b| a.name.downcase <=> b.name.downcase }
     @versions = @project.versions
     versions_to_delete = @milestone.versions
     versions_to_add = []
@@ -77,7 +93,7 @@ class MilestonesController < ApplicationController
     end
     if @milestone.update_attributes(params[:milestone])
       versions_to_delete.each do |version|
-        milestone_version = MilestoneVersion.find(:first, :conditions => "milestone_id = #{@milestone.id} AND version_id = #{version.id}")
+        milestone_version = MilestoneVersion.where(:milestone_id => @milestone.id, :version_id => version.id).first
         milestone_version.destroy
       end
       versions_to_add.each do |version|
@@ -119,19 +135,6 @@ class MilestonesController < ApplicationController
   end
 
 private
-
-  def find_project
-    @project = Project.find(params[:project_id])
-  rescue ActiveRecord::RecordNotFound
-    render_404
-  end
-
-  def find_milestone
-    @milestone = Milestone.find(params[:id])
-    @project = @milestone.project
-  rescue ActiveRecord::RecordNotFound
-    render_404
-  end
 
   def graph_theme
     {

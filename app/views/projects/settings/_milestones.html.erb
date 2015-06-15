@@ -11,12 +11,29 @@
   <tbody>
   <% for milestone in @project.milestones.sort %>
     <tr class="<%= cycle 'odd', 'even' %>">
-      <td><%= link_to h(milestone.name), :controller => :milestones, :action => :show, :id => milestone.id %></td>
+      <td>
+        <%= link_to h(milestone.name), :controller => :milestones, :action => :show, :id => milestone.id %>
+      </td>
       <td align="center"><%= format_date(milestone.effective_date) %></td>
       <td><%=h milestone.description %></td>
-      <td align="center"><%= milestone.versions.sort { |a, b| a.name.downcase <=> b.name.downcase }.collect {|v| link_to(h(v.name), :controller => :versions, :action => :show, :id => v) }.join(", ").html_safe %></td>
-      <td align="center"><%= link_to_if_authorized l(:button_edit), { :controller => :milestones, :action => :edit, :id => milestone.id }, :class => 'icon icon-edit' %></td>
-      <td align="center"><%= link_to_if_authorized l(:button_delete), {:controller => :milestones, :action => :destroy, :id => milestone.id }, :confirm => l(:text_are_you_sure), :method => :delete, :class => 'icon icon-del' %></td>
+      <td align="center">
+        <%= milestone.versions.sort { |a, b|
+              a.name.downcase <=> b.name.downcase
+            }.collect { |v|
+              link_to(h(v.name), :controller => :versions, :action => :show, :id => v)
+            }.join(", ").html_safe %>
+      </td>
+      <td align="center">
+        <%- if User.current.allowed_to?(:manage_milestones, @project) -%>
+          <%= link_to(l(:button_edit), edit_milestone_path(milestone),
+                      :class => "icon icon-edit") %>
+        <%- end -%>
+      </td>
+      <td align="center">
+        <%- if User.current.allowed_to?(:manage_milestones, @project) -%>
+          <%= delete_link(milestone_path(milestone)) %>
+        <%- end -%>
+      </td>
     </tr>
   <% end; reset_cycle %>
   </tbody>
@@ -26,3 +43,5 @@
 <% end %>
 
 <p><%= link_to l(:label_milestone_new), new_project_milestone_path(@project, :back_url => ''), :class => 'icon icon-add' if User.current.allowed_to?(:manage_milestones, @project) %></p>
+
+<%= render :partial => "common/advanced_roadmap_footer" %>

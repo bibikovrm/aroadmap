@@ -1,3 +1,12 @@
+# encoding: UTF-8
+
+# Copyright © Emilio González Montaña
+# Licence: Attribution & no derivates
+#   * Attribution to the plugin web page URL should be done if you want to use it.
+#     https://redmine.ociotec.com/projects/advanced-roadmap
+#   * No derivates of this plugin (or partial) are allowed.
+# Take a look to licence.txt file at plugin root folder for further details.
+
 require_dependency "calendars_controller"
 
 module AdvancedRoadmap
@@ -14,9 +23,9 @@ module AdvancedRoadmap
             include ApplicationHelper
           end
           milestones = []
-          @query.milestones(:conditions => ["effective_date BETWEEN ? AND ?",
-                                            @calendar.startdt,
-                                            @calendar.enddt]).each do |milestone|
+          @query.milestones.where(["effective_date BETWEEN ? AND ?",
+                                   @calendar.startdt,
+                                   @calendar.enddt]).each do |milestone|
             milestones << {:name => milestone.name,
                            :url => url_for(:controller => :milestones,
                                            :action => :show,
@@ -44,11 +53,11 @@ module AdvancedRoadmap
           @query.group_by = nil
           if @query.valid?
             events = []
-            events += @query.issues(:include => [:tracker, :assigned_to, :priority],
-                                    :conditions => ["((#{Issue.quoted_table_name}.start_date BETWEEN ? AND ?) OR (due_date BETWEEN ? AND ?))", @calendar.startdt, @calendar.enddt, @calendar.startdt, @calendar.enddt]
-                                    )
-            events += @query.versions(:conditions => ["effective_date BETWEEN ? AND ?", @calendar.startdt, @calendar.enddt])
-
+            events += @query.issues.includes([:tracker, :assigned_to, :priority]).where(
+                ["((#{Issue.quoted_table_name}.start_date BETWEEN ? AND ?) OR (due_date BETWEEN ? AND ?))",
+                 @calendar.startdt, @calendar.enddt, @calendar.startdt, @calendar.enddt])
+            events += @query.versions.where(["effective_date BETWEEN ? AND ?",
+                                             @calendar.startdt, @calendar.enddt])
             @calendar.events = events
           end
 

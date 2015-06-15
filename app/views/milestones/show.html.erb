@@ -1,5 +1,6 @@
 <div class="contextual">
-<%= link_to_if_authorized l(:button_edit), {:controller => :milestones, :action => :edit, :id => @milestone.id}, :class => 'icon icon-edit' %>
+  <%= link_to(l(:button_edit), edit_milestone_path(@milestone),
+              :class => 'icon icon-edit') if User.current.allowed_to?(:manage_milestones, @project) %>
 </div>
 
 <h2><%= h(@milestone.name) %></h2>
@@ -40,3 +41,5 @@
 <% html_title(l(:label_roadmap)) %>
 
 <%= context_menu issues_context_menu_path %>
+
+<%= render :partial => "common/advanced_roadmap_footer" %>

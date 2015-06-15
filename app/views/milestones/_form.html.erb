@@ -1,10 +1,11 @@
 <%= error_messages_for 'milestone' %>
 
-<div class="box">
+<div class="box tabular">
   <p><%= f.text_field :name, :size => 60, :required => true %></p>
   <p><%= f.text_field :description, :size => 60 %></p>
   <p><%= f.text_field :effective_date, :size => 10 %><%= calendar_for('milestone_effective_date') %></p>
   <p>
+    <label for="milestone_project_selector"><%= l(:field_project) %></label>
     <select id="project_selector">
       <% @projects.each do |project| %>
         <option<%= (project == @project) ? " selected" : "" %> id="<%= project.id %>"><%= h(project.name) %></option>

@@ -1,5 +1,12 @@
 # encoding: UTF-8
 
+# Copyright © Emilio González Montaña
+# Licence: Attribution & no derivates
+#   * Attribution to the plugin web page URL should be done if you want to use it.
+#     https://redmine.ociotec.com/projects/advanced-roadmap
+#   * No derivates of this plugin (or partial) are allowed.
+# Take a look to licence.txt file at plugin root folder for further details.
+
 # This plugin should be reloaded in development mode.
 if (Rails.env == "development")
   ActiveSupport::Dependencies.autoload_once_paths.reject!{|x| x =~ /^#{Regexp.escape(File.dirname(__FILE__))}/}
@@ -29,9 +36,9 @@ Redmine::Plugin.register :advanced_roadmap do
   author "Emilio González Montaña"
   author_url "http://ociotec.com"
   description "This is a plugin for Redmine that is used to show more information inside the Roadmap page and implements the milestones featuring."
-  version "0.8.1"
+  version "0.9.0"
   permission :manage_milestones, {:milestones => [:new, :create, :edit, :update, :destroy]}
-  requires_redmine :version_or_higher => "2.1.2"
+  requires_redmine :version_or_higher => "3.0.0"
 
   project_module :issue_tracking do
     permission :view_issue_estimated_hours, {}

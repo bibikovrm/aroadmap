@@ -1,3 +1,12 @@
+# encoding: UTF-8
+
+# Copyright © Emilio González Montaña
+# Licence: Attribution & no derivates
+#   * Attribution to the plugin web page URL should be done if you want to use it.
+#     https://redmine.ociotec.com/projects/advanced-roadmap
+#   * No derivates of this plugin (or partial) are allowed.
+# Take a look to licence.txt file at plugin root folder for further details.
+
 require_dependency "issues_controller"
 
 module AdvancedRoadmap
@@ -12,7 +21,7 @@ module AdvancedRoadmap
               (!(User.current.allowed_to?(:view_issue_estimated_hours, @project))) and
               (!(@journals.nil?)))
             @journals.each do |journal|
-              journal.details.delete_if{|detail| detail.prop_key == "estimated_hours"}
+              journal.details = journal.details.where("prop_key != 'estimated_hours'") unless journal.details.blank?
             end
             @journals.delete_if{|journal| journal.details.empty?}
           end

@@ -1,6 +1,6 @@
 <%- defaults = Redmine::Plugin::registered_plugins[:advanced_roadmap].settings[:default] -%>
 
-<%- version_custom_fields = CustomField.find(:all, :conditions => "type = 'VersionCustomField'")
+<%- version_custom_fields = CustomField.where("type = 'VersionCustomField'")
     version_custom_field_options = options_for_select([["", 0]] + version_custom_fields.collect{|c| [c.name, c.id]},
                                                       (@settings["parallel_effort_custom_field"] || defaults["parallel_effort_custom_field"]).to_i) -%>
 
@@ -43,3 +43,5 @@
   <label><%= l(:label_setting_color_very_bad) %>:</label>
   <%= text_field_tag("settings[color_very_bad]", @settings["color_very_bad"] || defaults["color_very_bad"]) %>
 </p>
+
+<%= render :partial => "common/advanced_roadmap_footer" %>
