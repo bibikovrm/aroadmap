@@ -6,9 +6,14 @@
 <h2><%= h(@milestone.name) %></h2>
 
 <% if @milestone.completed? %>
-  <p><%= format_date(@milestone.effective_date) %></p>
-<% elsif @milestone.effective_date %>
-  <p><strong><%= due_date_distance_in_words(@milestone.effective_date) %></strong> (<%= format_date(@milestone.effective_date) %>)</p>
+  <p><%= format_date(@milestone.milestone_effective_date) %></p>
+<% elsif @milestone.milestone_effective_date %>
+  <p>
+    <strong>
+      <%= due_date_distance_in_words(@milestone.milestone_effective_date) %>
+    </strong>
+    (<%= format_date(@milestone.milestone_effective_date) %>)
+  </p>
 <% end %>
 
 <p><%= h(@milestone.description) %></p>
@@ -17,7 +22,7 @@
 <p class="nodata"><%= l(:label_no_data) %></p>
 <% else %>
 <div id="roadmap">
-<%= render(:partial => "versions/total", :locals => {:project => @project, :totals => @totals, :versions => @milestone.versions}) %>
+<%= render(:partial => 'versions/total', :locals => {:project => @project, :totals => @totals, :versions => @milestone.versions}) %>
 <% @milestone.versions.each do |version| %>
     <h3 class="version"><%= tag 'a', :name => version.name %><%= link_to_version version %></h3>
     <%= render :partial => 'versions/info', :locals => {:version => version, :issues => version.sorted_fixed_issues, :totals => @totals} %>
@@ -42,4 +47,4 @@
 
 <%= context_menu issues_context_menu_path %>
 
-<%= render :partial => "common/advanced_roadmap_footer" %>
+<%= render :partial => 'common/advanced_roadmap_footer' %>

@@ -19,24 +19,24 @@
         <%- end -%>
         <%- if @version.rest_hours > 0.0 %>
           <tr>
-            <td width="130px" align="right"><%= l(:label_roadmap_due_in, "") %></td>
+            <td width="130px" align="right"><%= l(:label_roadmap_due_in, '') %></td>
             <td width="240px" class="total-hours"><%= "#{l_hours(@version.rest_hours)} / #{l_days(@version.rest_hours / 8.0)} / #{l_weeks(@version.rest_hours / 40.0)}" %></td>
           </tr>
           <%- if @version.rest_hours != @version.speed_rest_hours -%>
             <tr>
-              <td width="130px" align="right"><%= l(:label_roadmap_due_in, "") %> (<%= l(:label_estimated_speed) %>)</td>
+              <td width="130px" align="right"><%= l(:label_roadmap_due_in, '') %> (<%= l(:label_estimated_speed) %>)</td>
               <td width="240px" class="total-hours"><%= "#{l_hours(@version.speed_rest_hours)} / #{l_days(@version.speed_rest_hours / 8.0)} / #{l_weeks(@version.speed_rest_hours / 40.0)}" %></td>
             </tr>
           <%- end -%>
-          <%- if !(custom_field = CustomField.find_by_id(Setting.plugin_advanced_roadmap["parallel_effort_custom_field"].to_i)).nil? and
-                 custom_field.field_format == "float" and @version.parallel_rest_hours != @version.rest_hours -%>
+          <%- if !(custom_field = CustomField.find_by_id(Setting.plugin_advanced_roadmap['parallel_effort_custom_field'].to_i)).nil? and
+                 custom_field.field_format == 'float' and @version.parallel_rest_hours != @version.rest_hours -%>
             <tr>
-              <td width="130px" align="right"><%= l(:label_roadmap_due_in, "") %> (<%= custom_field.name %>)</td>
+              <td width="130px" align="right"><%= l(:label_roadmap_due_in, '') %> (<%= custom_field.name %>)</td>
               <td width="240px" class="total-hours"><%= "#{l_hours(@version.parallel_rest_hours)} / #{l_days(@version.parallel_rest_hours / 8.0)} / #{l_weeks(@version.parallel_rest_hours / 40.0)}" %></td>
             </tr>
             <%- if @version.parallel_speed_rest_hours != @version.parallel_rest_hours -%>
               <tr>
-                <td width="130px" align="right"><%= l(:label_roadmap_due_in, "") %> (<%= custom_field.name %> + <%= l(:label_estimated_speed) %>)</td>
+                <td width="130px" align="right"><%= l(:label_roadmap_due_in, '') %> (<%= custom_field.name %> + <%= l(:label_estimated_speed) %>)</td>
                 <td width="240px" class="total-hours"><%= "#{l_hours(@version.parallel_speed_rest_hours)} / #{l_days(@version.parallel_speed_rest_hours / 8.0)} / #{l_weeks(@version.parallel_speed_rest_hours / 40.0)}" %></td>
               </tr>
             <%- end -%>
@@ -60,4 +60,4 @@
 
 <%= context_menu issues_context_menu_path %>
 
-<%= render :partial => "common/advanced_roadmap_footer" %>
+<%= render :partial => 'common/advanced_roadmap_footer' %>

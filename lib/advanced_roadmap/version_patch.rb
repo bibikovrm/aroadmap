@@ -7,7 +7,7 @@
 #   * No derivates of this plugin (or partial) are allowed.
 # Take a look to licence.txt file at plugin root folder for further details.
 
-require_dependency "version"
+require_dependency 'version'
 
 module AdvancedRoadmap
   module VersionPatch
@@ -90,7 +90,7 @@ module AdvancedRoadmap
                 end
               end
             end
-            if solved_issues < Setting.plugin_advanced_roadmap["solved_issues_to_estimate"].to_i or total_solved_estimated == 0.0
+            if solved_issues < Setting.plugin_advanced_roadmap['solved_issues_to_estimate'].to_i or total_solved_estimated == 0.0
               @progress_factor = nil
             else
               @progress_factor = total_solved_spent / total_solved_estimated
@@ -123,9 +123,10 @@ module AdvancedRoadmap
   
         def parallel_factor
           factor = 1.0
-          if !(custom_field = CustomField.find_by_id(Setting.plugin_advanced_roadmap["parallel_effort_custom_field"].to_i)).nil? and
-             custom_field.field_format == "float"
-            if !(custom_value = CustomValue.where(:customized_type => "Version", :customized_id => id, :custom_field_id => custom_field.id).first).nil?
+          if !(custom_field = CustomField.find_by_id(Setting.plugin_advanced_roadmap['parallel_effort_custom_field'].to_i)).nil? and
+             custom_field.field_format == 'float'
+            if !(custom_value = CustomValue.where(:customized_type => 'Version', :customized_id => id,
+                                                  :custom_field_id => custom_field.id).first).nil?
               factor = custom_value.value.to_f
             else
               factor = custom_field.default_value.to_f

@@ -7,8 +7,7 @@
 #   * No derivates of this plugin (or partial) are allowed.
 # Take a look to licence.txt file at plugin root folder for further details.
 
-require_dependency "versions_controller"
-require_dependency "versions_controller"
+require_dependency 'versions_controller'
 
 module AdvancedRoadmap
   module VersionsControllerPatch

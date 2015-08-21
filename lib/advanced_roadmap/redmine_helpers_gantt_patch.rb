@@ -41,10 +41,10 @@ module AdvancedRoadmap
         def subject_for_milestones_label(options)
           case options[:format]
           when :html
-            subject = "<span class='icon icon-milestones'>"
+            subject = '<span class=\'icon icon-milestones\'>'
             subject << l(:label_milestone_plural)
-            subject << "</span>"
-            html_subject(options, subject, :css => "milestones-label")
+            subject << '</span>'
+            html_subject(options, subject, :css => 'milestones-label')
           when :image
             image_subject(options, l(:label_milestone_plural))
           when :pdf
@@ -56,10 +56,10 @@ module AdvancedRoadmap
         def subject_for_milestone(milestone, options)
           case options[:format]
           when :html
-            subject = "<span class='icon icon-milestone'>"
+            subject = '<span class=\'icon icon-milestone\'>'
             subject << view.link_to_milestone(milestone)
-            subject << "</span>"
-            html_subject(options, subject, :css => "milestone-name")
+            subject << '</span>'
+            html_subject(options, subject, :css => 'milestone-name')
           when :image
             image_subject(options, milestone.to_s)
           when :pdf
@@ -77,15 +77,15 @@ module AdvancedRoadmap
             label = "#{h(milestone)}"
             case options[:format]
             when :html
-              html_task(options, coords, :css => "version task", :label => label, :markers => true)
+              html_task(options, coords, :css => 'version task', :label => label, :markers => true)
             when :image
               image_task(options, coords, :label => label, :markers => true, :height => 3)
             when :pdf
               pdf_task(options, coords, :label => label, :markers => true, :height => 0.8)
             end
           else
-            ActiveRecord::Base.logger.debug "Gantt#line_for_milestone was not given a milestone with an effective_date"
-            ""
+            ActiveRecord::Base.logger.debug 'Gantt#line_for_milestone was not given a milestone with an effective_date'
+            ''
           end
         end
 

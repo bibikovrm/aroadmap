@@ -7,7 +7,7 @@
 #   * No derivates of this plugin (or partial) are allowed.
 # Take a look to licence.txt file at plugin root folder for further details.
 
-require "advanced_roadmap/gruff/pie"
+require 'advanced_roadmap/gruff/pie'
 
 class MilestonesController < ApplicationController
   
@@ -64,10 +64,9 @@ class MilestonesController < ApplicationController
         end
        end
       flash[:notice] = l(:notice_successful_create)
-      redirect_to :controller => :projects, :action => :settings, :tab => "milestones", :id => @project
+      redirect_to :controller => :projects, :action => :settings, :tab => 'milestones', :id => @project
     end
   rescue ActiveRecord::RecordNotFound => e
-    puts("%%% excepcion: #{e.inspect}")
     render_404
   end
   
@@ -103,20 +102,20 @@ class MilestonesController < ApplicationController
         milestone_version.save
       end
       flash[:notice] = l(:notice_successful_update)
-      redirect_to :controller => :projects, :action => :settings, :tab => "milestones", :id => @project
+      redirect_to :controller => :projects, :action => :settings, :tab => 'milestones', :id => @project
     end
   end
 
   def destroy
     @milestone.destroy
-    redirect_to :controller => :projects, :action => :settings, :tab => "milestones", :id => @project
+    redirect_to :controller => :projects, :action => :settings, :tab => 'milestones', :id => @project
   rescue
     flash[:error] = l(:notice_unable_delete_milestone)
-    redirect_to :controller => :projects, :action => :settings, :tab => "milestones", :id => @project
+    redirect_to :controller => :projects, :action => :settings, :tab => 'milestones', :id => @project
   end
 
   def total_graph
-    g = AdvancedRoadmap::Gruff::Pie.new(params[:size] || "500x400")
+    g = AdvancedRoadmap::Gruff::Pie.new(params[:size] || '500x400')
     g.hide_title = true
     g.theme = graph_theme
     g.margins = 0
@@ -130,17 +129,18 @@ class MilestonesController < ApplicationController
       i += 1
     end
 
-    headers["Content-Type"] = "image/png"
-    send_data(g.to_blob, :type => "image/png", :disposition => "inline")
+    headers['Content-Type'] = 'image/png'
+    send_data(g.to_blob, :type => 'image/png', :disposition => 'inline')
   end
 
 private
 
   def graph_theme
     {
-      :colors => ["#DB2626", "#6A6ADB", "#64D564", "#F727F7", "#EBEB20", "#303030", "#12ABAD", "#808080", "#B7580B", "#316211"],
-      :marker_color => "#AAAAAA",
-      :background_colors => ["#FFFFFF", "#FFFFFF"]
+      :colors => ['#DB2626', '#6A6ADB', '#64D564', '#F727F7', '#EBEB20', '#303030', '#12ABAD',
+                  '#808080', '#B7580B', '#316211'],
+      :marker_color => '#AAAAAA',
+      :background_colors => ['#FFFFFF', '#FFFFFF']
     }
   end
 

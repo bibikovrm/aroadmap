@@ -4,7 +4,7 @@
 <p class="nodata"><%= l(:label_no_data) %></p>
 <% else %>
 <div id="roadmap">
-<%= render(:partial => "versions/total", :locals => {:project => @project, :totals => @totals, :versions => @versions}) %>
+<%= render(:partial => 'versions/total', :locals => {:project => @project, :totals => @totals, :versions => @versions}) %>
 <% @versions.each do |version| %>
     <h3 class="version"><%= tag 'a', :name => version.name %><%= link_to_version version %></h3>
     <%= render :partial => 'versions/info', :locals => {:version => version, :issues => version.sorted_fixed_issues(:trackers => @selected_tracker_ids), :totals => @totals} %>
@@ -17,11 +17,11 @@
 <%= form_tag({}, :method => :get) do %>
 <h3><%= l(:label_roadmap) %></h3>
 <% @trackers.each do |tracker| %>
-  <label><%= check_box_tag "tracker_ids[]", tracker.id, (@selected_tracker_ids.include? tracker.id.to_s), :id => nil %>
+  <label><%= check_box_tag 'tracker_ids[]', tracker.id, (@selected_tracker_ids.include? tracker.id.to_s), :id => nil %>
   <%=h tracker.name %></label><br />
 <% end %>
 <br />
-<label for="completed"><%= check_box_tag "completed", 1, params[:completed] %> <%= l(:label_show_completed_versions) %></label>
+<label for="completed"><%= check_box_tag 'completed', 1, params[:completed] %> <%= l(:label_show_completed_versions) %></label>
 <% if @project.descendants.active.any? %>
 	<%= hidden_field_tag 'with_subprojects', 0 %>
   <br /><label><%= check_box_tag 'with_subprojects', 1, @with_subprojects %> <%=l(:label_subproject_plural)%></label>
@@ -43,4 +43,4 @@
 
 <%= context_menu issues_context_menu_path %>
 
-<%= render :partial => "common/advanced_roadmap_footer" %>
+<%= render :partial => 'common/advanced_roadmap_footer' %>

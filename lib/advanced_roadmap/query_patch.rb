@@ -7,7 +7,7 @@
 #   * No derivates of this plugin (or partial) are allowed.
 # Take a look to licence.txt file at plugin root folder for further details.
 
-require_dependency "query"
+require_dependency 'query'
 
 module AdvancedRoadmap
   module QueryPatch
@@ -17,7 +17,10 @@ module AdvancedRoadmap
         # Returns the milestones
         # Valid options are :conditions
         def milestones(options = {})
-          Milestone.includes(:project).where(Query.merge_conditions(project_statement, options[:conditions]))
+          Milestone
+              .joins(:project)
+              .includes(:project)
+              .where(Query.merge_conditions(project_statement, options[:conditions]))
         rescue ::ActiveRecord::StatementInvalid => e
           raise StatementInvalid.new(e.message)
         end

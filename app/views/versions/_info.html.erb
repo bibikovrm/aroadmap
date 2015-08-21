@@ -1,5 +1,5 @@
 <%= render :partial => 'versions/overview', :locals => {:version => version} %>
-<%= render(:partial => "wiki/content", :locals => {:content => version.wiki_page.content}) if version.wiki_page %>
+<%= render(:partial => 'wiki/content', :locals => {:content => version.wiki_page.content}) if version.wiki_page %>
 
 <%- # Version cached values.
     version_estimated_speed = version.estimated_speed
@@ -9,13 +9,13 @@
     version_parallel_rest_hours = version.parallel_rest_hours
     version_parallel_speed_rest_hours = version.parallel_speed_rest_hours -%>
 
-<%- if (params[:controller] == "versions" and params[:action] == "index") or
-       (params[:controller] == "milestones" and params[:action] == "show") -%>
+<%- if (params[:controller] == 'versions' and params[:action] == 'index') or
+       (params[:controller] == 'milestones' and params[:action] == 'show') -%>
   <table>
     <%- if (totals[:spent_hours] + totals[:rest_hours]) > 0 -%>
       <tr>
-        <td width="310px" align="right">% <%= (params[:controller] == "milestones") ? l(:label_milestone) : l(:label_project) %></td>
-        <td width="340px" class="total-hours"><%= "%.0f" % (((version_spent_hours + version_rest_hours) * 100.0) / (totals[:spent_hours] + totals[:rest_hours])) %>%</td>
+        <td width="310px" align="right">% <%= (params[:controller] == 'milestones') ? l(:label_milestone) : l(:label_project) %></td>
+        <td width="340px" class="total-hours"><%= '%.0f' % (((version_spent_hours + version_rest_hours) * 100.0) / (totals[:spent_hours] + totals[:rest_hours])) %>%</td>
       </tr>
     <%- end -%>
     <%- if User.current.allowed_to?(:view_time_entries, @project) and
@@ -23,7 +23,7 @@
       <%- if !version_estimated_speed.nil? -%>
         <tr>
             <td width="310px" align="right">% <%= l(:label_estimated_speed) %></td>
-            <td width="340px" class="total-hours"><font color="<%= color_by_ratio(version_estimated_speed) %>"><%= ("%.0f" % (100.0 / version_estimated_speed)) %>%</font></td>
+            <td width="340px" class="total-hours"><font color="<%= color_by_ratio(version_estimated_speed) %>"><%= ('%.0f' % (100.0 / version_estimated_speed)) %>%</font></td>
         </tr>
       <%- end -%>
       <%- if version_rest_hours > 0.0 %>
@@ -37,7 +37,7 @@
             <td width="340px" class="total-hours"><%= "#{l_hours(version_speed_rest_hours)} / #{l_days(version_speed_rest_hours / 8.0)} / #{l_weeks(version_speed_rest_hours / 40.0)}" %></td>
           </tr>
         <%- end -%>
-        <%- if !(custom_field = CustomField.find_by_id(Setting.plugin_advanced_roadmap["parallel_effort_custom_field"].to_i)).nil? and
+        <%- if !(custom_field = CustomField.find_by_id(Setting.plugin_advanced_roadmap['parallel_effort_custom_field'].to_i)).nil? and
                custom_field.field_format == "float" and version_parallel_rest_hours != version_rest_hours -%>
           <tr>
             <td width="310px" align="right"><%= l(:label_roadmap_due_in, "") %> (<%= custom_field.name %>)</td>
@@ -83,9 +83,9 @@
     <th width="9%" align="center"><%= l(:field_done_ratio) %></th>
     <%- if User.current.allowed_to?(:view_time_entries, @project) and
            User.current.allowed_to?(:view_issue_estimated_hours, @project) -%>
-      <th width="9%" align="center"><%= l(:label_roadmap_due_in, "") %></th>
+      <th width="9%" align="center"><%= l(:label_roadmap_due_in, '') %></th>
       <%- if !version_estimated_speed.nil? -%>
-        <th width="9%" align="center"><%= l(:label_roadmap_due_in, "") %><br />(<%= l(:label_estimated_speed) %>)</th>
+        <th width="9%" align="center"><%= l(:label_roadmap_due_in, '') %><br />(<%= l(:label_estimated_speed) %>)</th>
       <%- end -%>
     <%- end -%>
   </thead>
@@ -104,12 +104,12 @@
           color = color_by_ratio(issue_spent_hours / ((issue_estimated_hours * issue_done_ratio) / 100.0))
         end
         if issue.closed?
-          begin_strike = "<strike>".html_safe
-          end_strike = "</strike>".html_safe
+          begin_strike = '<strike>'.html_safe
+          end_strike = '</strike>'.html_safe
         end -%>
-    <tr class="hascontextmenu <%= cycle("odd", "even") %>\">
-      <%- tab = "&nbsp;" * 3 * issue.parents_count -%>
-      <td class="checkbox"><%= check_box_tag("ids[]", issue.id) %></td>
+    <tr class="hascontextmenu <%= cycle('odd', 'even') %>\">
+      <%- tab = '&nbsp;' * 3 * issue.parents_count -%>
+      <td class="checkbox"><%= check_box_tag('ids[]', issue.id) %></td>
       <td align="left">
         <div class="tooltip" align="left">
           <%= tab %>
@@ -133,17 +133,17 @@
         </div>
       </td>
       <%- if User.current.allowed_to?(:view_issue_estimated_hours, @project) -%>
-        <td align="center"><font color="<%= color %>"><%= begin_strike %><%= ("%.2f" % issue_estimated_hours) if issue_estimated_hours %><%= end_strike %></font></td>
+        <td align="center"><font color="<%= color %>"><%= begin_strike %><%= ('%.2f' % issue_estimated_hours) if issue_estimated_hours %><%= end_strike %></font></td>
       <%- end -%>
       <%- if User.current.allowed_to?(:view_time_entries, @project) -%>
-        <td align="center"><font color="<%= color %>"><%= begin_strike %><%= "%.2f" % issue_spent_hours %><%= end_strike %></font></td>
+        <td align="center"><font color="<%= color %>"><%= begin_strike %><%= '%.2f' % issue_spent_hours %><%= end_strike %></font></td>
       <%- end -%>
-      <td align="center"><font color="<%= color %>"><%= begin_strike %><%= (("%.0f" % issue_done_ratio) + "%") %><%= end_strike %></font></td>
+      <td align="center"><font color="<%= color %>"><%= begin_strike %><%= (('%.0f' % issue_done_ratio) + '%') %><%= end_strike %></font></td>
       <%- if User.current.allowed_to?(:view_time_entries, @project) and
              User.current.allowed_to?(:view_issue_estimated_hours, @project) -%>
-        <td align="center"><font color="<%= color %>"><%= begin_strike %><%= ("%.2f" % issue_rest_hours) if issue_estimated_hours or issue_spent_hours %><%= end_strike %></font></td>
+        <td align="center"><font color="<%= color %>"><%= begin_strike %><%= ('%.2f' % issue_rest_hours) if issue_estimated_hours or issue_spent_hours %><%= end_strike %></font></td>
         <%- if !version_estimated_speed.nil? -%>
-          <td align="center"><font color="<%= color %>"><%= begin_strike %><%= ("%.2f" % (issue_rest_hours * ((!issue.closed? and (!issue_spent_hours or issue_spent_hours <= 0.0) and !version_estimated_speed.nil?) ? version_estimated_speed : 1.0))) if issue_estimated_hours or issue_spent_hours %><%= end_strike %></font></td>
+          <td align="center"><font color="<%= color %>"><%= begin_strike %><%= ('%.2f' % (issue_rest_hours * ((!issue.closed? and (!issue_spent_hours or issue_spent_hours <= 0.0) and !version_estimated_speed.nil?) ? version_estimated_speed : 1.0))) if issue_estimated_hours or issue_spent_hours %><%= end_strike %></font></td>
         <%- end -%>
       <%- end -%>
     </tr>
@@ -152,17 +152,17 @@
   <thead>
     <th align="left"><%= l(:label_total) %></th>
     <%- if User.current.allowed_to?(:view_issue_estimated_hours, @project) -%>
-      <th align="center"><%= ("%.2f" % version.estimated_hours) %></th>
+      <th align="center"><%= ('%.2f' % version.estimated_hours) %></th>
     <%- end -%>
     <%- if User.current.allowed_to?(:view_time_entries, @project) -%>
-      <th align="center"><%= ("%.2f" % version_spent_hours) %></th>
+      <th align="center"><%= ('%.2f' % version_spent_hours) %></th>
     <%- end -%>
-    <th align="center"><%= ("%.0f" % version.completed_percent) %>%</th>
+    <th align="center"><%= ('%.0f' % version.completed_percent) %>%</th>
     <%- if User.current.allowed_to?(:view_time_entries, @project) and
            User.current.allowed_to?(:view_issue_estimated_hours, @project) -%>
-      <th align="center"><%= ("%.2f" % version_rest_hours) %></th>
+      <th align="center"><%= ('%.2f' % version_rest_hours) %></th>
       <%- if !version_estimated_speed.nil? -%>
-        <th align="center"><%= ("%.2f" % version_speed_rest_hours) %></th>
+        <th align="center"><%= ('%.2f' % version_speed_rest_hours) %></th>
       <%- end -%>
     <%- end -%>
   </thead>
