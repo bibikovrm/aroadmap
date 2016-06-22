@@ -3,7 +3,10 @@
 <div class="box tabular">
   <p><%= f.text_field :name, :size => 60, :required => true %></p>
   <p><%= f.text_field :description, :size => 60 %></p>
-  <p><%= f.text_field :milestone_effective_date, :size => 10 %><%= calendar_for('milestone_milestone_effective_date') %></p>
+  <p>
+    <%= f.text_field :milestone_effective_date, :size => 10, :label => l(:field_effective_date) %>
+    <%= calendar_for('milestone_milestone_effective_date') %>
+  </p>
   <p>
     <label for="milestone_project_selector"><%= l(:field_project) %></label>
     <select id="project_selector">
