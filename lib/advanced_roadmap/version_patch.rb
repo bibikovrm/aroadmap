@@ -175,6 +175,9 @@ module AdvancedRoadmap
           totals[:parallel_speed_rest_hours] = 0.0
           totals[:completed_pourcent] = 0.0
           totals[:closed_pourcent] = 0.0
+          totals[:issues_count] = 0
+          totals[:open_issues_count] = 0
+          totals[:closed_issues_count] = 0
           versions.each do |version|
             totals[:estimated_hours] += version.estimated_hours
             totals[:spent_hours] += version.spent_hours
@@ -184,6 +187,9 @@ module AdvancedRoadmap
             totals[:parallel_speed_rest_hours] += version.parallel_speed_rest_hours
             totals[:completed_pourcent] += version.spent_hours
             totals[:closed_pourcent] += version.closed_spent_hours
+            totals[:issues_count] += version.issues_count
+            totals[:open_issues_count] += version.open_issues_count
+            totals[:closed_issues_count] += version.closed_issues_count
           end
           totals[:total] = totals[:spent_hours] + totals[:rest_hours]
           if totals[:total] > 0.0

@@ -54,20 +54,22 @@
     >
       <table class="list">
         <thead>
-          <th><%= l(:field_version) %></th>
-          <th><%= l(:field_effective_date) %></th>
-          <th><%= l(:field_description) %></th>
-          <th><%= l(:label_milestone_plural) %></th>
+          <th style="text-align: left;"><%= l(:field_version) %></th>
+          <th style="text-align: center;"><%= l(:field_effective_date) %></th>
+          <th style="text-align: left;"><%= l(:field_description) %></th>
+          <th style="text-align: center;"><%= l(:label_milestone_plural) %></th>
         </thead>
         <% project.versions.sort.each do |version| %>
           <tr class="<%= cycle('odd', 'even') %>">
-            <td>
+            <td style="text-align: left;">
               <%= check_box_tag 'versions[]', version.id, @milestone.versions?(version) %>
               <%= link_to(h(version.name), :controller => :versions, :action => :show, :id => version) %>
             </td>
-            <td align="center"><%= version.effective_date %></td>
-            <td><%= version.description %></td>
-            <td align="center"><%= version.milestones.collect {|m| link_to(h(m.name), :controller => :milestones, :action => :show, :id => m.id) }.join(', ').html_safe %></td>
+            <td style="text-align: center;"><%= version.effective_date %></td>
+            <td style="text-align: left;"><%= version.description %></td>
+            <td style="text-align: center;">
+              <%= version.milestones.collect {|m| link_to(h(m.name), :controller => :milestones, :action => :show, :id => m.id) }.join(', ').html_safe %>
+            </td>
           <tr>
         <% end %>
       </table>

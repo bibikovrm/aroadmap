@@ -37,7 +37,7 @@
 <%= link_to milestone.name, :controller => :milestones, :action => :show, :id => milestone.id %><br />
 <% end %>
 <h3><%= l(:label_version_plural) %></h3>
-<%= link_to(l(:label_total), "##{l(:label_total)}") %><br />
+<%= link_to(l(:label_total), "#total") %><br />
 <% @milestone.versions.each do |version| %>
 <%= link_to format_version_name(version), "##{version.name}" %><br />
 <% end %>
