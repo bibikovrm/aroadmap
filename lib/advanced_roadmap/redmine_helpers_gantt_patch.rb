@@ -12,38 +12,39 @@ module AdvancedRoadmap
     def self.included(base)
       base.class_eval do
 
-        def render_version_with_milestones(project, version, options = {})
-          if @last_rendered_project.nil? and project.milestones.any?
-            subject_for_milestones_label(options)
-            options[:top] += options[:top_increment]
-            @number_of_rows += 1
-            return if abort?
-            options[:indent] += options[:indent_increment]
-            project.milestones.sort.each do |milestone|
-              render_milestone(project, milestone, options)
-              return if abort?
+        def render_project_with_milestones(project, options={})
+          render_object_row(project, options)
+          increment_indent(options) do
+            # render project milestones.
+            if project.milestones.any?
+              subject_for_milestones_label(options)
+              @number_of_rows += 1
+              options[:top] += options[:top_increment]
+              increment_indent(options) do
+                project.milestones.sort.each do |milestone|
+                  render_object_row(milestone, options)
+                end
+              end
             end
-            options[:indent] -= options[:indent_increment]
+            # render issue that are not assigned to a version
+            issues = project_issues(project).select {|i| i.fixed_version.nil?}
+            render_issues(issues, options)
+            # then render project versions and their issues
+            versions = project_versions(project)
+            self.class.sort_versions!(versions)
+            versions.each do |version|
+              render_version(project, version, options)
+            end
           end
-          @last_rendered_project = project
-          render_version_without_milestones(project, version, options)
         end
-        alias_method_chain :render_version, :milestones
-
-        def render_milestone(project, milestone, options = {})
-          # Milestone header
-          subject_for_milestone(milestone, options) unless options[:only] == :lines
-          line_for_milestone(milestone, options) unless options[:only] == :subjects
-          options[:top] += options[:top_increment]
-          @number_of_rows += 1
-        end
+        alias_method_chain :render_project, :milestones
 
         def subject_for_milestones_label(options)
           case options[:format]
           when :html
-            subject = '<span class=\'icon icon-milestones\'>'
-            subject << l(:label_milestone_plural)
-            subject << '</span>'
+            subject = view.content_tag('span', :class => 'icon icon-milestones') do
+              l(:label_milestone_plural)
+            end
             html_subject(options, subject, :css => 'milestones-label')
           when :image
             image_subject(options, l(:label_milestone_plural))
@@ -56,9 +57,9 @@ module AdvancedRoadmap
         def subject_for_milestone(milestone, options)
           case options[:format]
           when :html
-            subject = '<span class=\'icon icon-milestone\'>'
-            subject << view.link_to_milestone(milestone)
-            subject << '</span>'
+            subject = view.content_tag('span', :class => 'icon icon-milestone') do
+              view.link_to_milestone(milestone)
+            end
             html_subject(options, subject, :css => 'milestone-name')
           when :image
             image_subject(options, milestone.to_s)
@@ -70,36 +71,38 @@ module AdvancedRoadmap
 
         def line_for_milestone(milestone, options)
           # Skip milestones that don't have an effective date
-          if milestone.is_a?(Milestone) && milestone.effective_date
+          if milestone.is_a?(Milestone) && milestone.milestone_effective_date
             options[:zoom] ||= 1
             options[:g_width] ||= (self.date_to - self.date_from + 1) * options[:zoom]
-            coords = coordinates_point(milestone.effective_date, options[:zoom])
-            label = "#{h(milestone)}"
+            coords = coordinates_point(milestone.milestone_effective_date, options[:zoom], options[:format])
+            label = h(milestone)
             case options[:format]
-            when :html
-              html_task(options, coords, :css => 'version task', :label => label, :markers => true)
-            when :image
-              image_task(options, coords, :label => label, :markers => true, :height => 3)
-            when :pdf
-              pdf_task(options, coords, :label => label, :markers => true, :height => 0.8)
+              when :html
+                html_task(options, coords, true, label, milestone)
+              when :image
+                image_task(options, coords, true, label, milestone)
+              when :pdf
+                pdf_task(options, coords, true, label, milestone)
+              else
+                raise 'Invalid type'
             end
           else
-            ActiveRecord::Base.logger.debug 'Gantt#line_for_milestone was not given a milestone with an effective_date'
+            ActiveRecord::Base.logger.debug 'Gantt#line_for_milestone was not given a milestone with an milestone_effective_date'
             ''
           end
         end
 
       private
 
-        def coordinates_point(date, zoom = nil)
+        def coordinates_point(date, zoom = nil, format = nil)
           zoom ||= @zoom
           coords = {}
           if date && (self.date_from < date) && (self.date_to > date)
             coords[:start] = date - self.date_from
-            coords[:end] = coords[:start] - 1
-            coords[:bar_start] = coords[:bar_end] = date - self.date_from
+            coords[:end] = (format == :pdf) ? (coords[:start]) : (coords[:start] - 1)
+            coords[:bar_end] = date - self.date_from
           end
-          # Transforms dates into pixels witdh
+          # Transforms dates into pixels width
           coords.keys.each do |key|
             coords[key] = ((coords[key] * zoom) + (zoom.to_f / 2.0)).floor
           end

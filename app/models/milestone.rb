@@ -56,4 +56,9 @@ class Milestone < ActiveRecord::Base
     milestone_effective_date && (milestone_effective_date <= Date.today)
   end
 
+  def is_a?(o)
+    return true if o == Version
+    super
+  end
+
 end
