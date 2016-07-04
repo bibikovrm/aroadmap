@@ -23,13 +23,13 @@ module AdvancedRoadmap
             include ApplicationHelper
           end
           milestones = []
-          @query.milestones.where(['milestones.milestone_effective_date BETWEEN ? AND ?',
-                                   @calendar.startdt,
-                                   @calendar.enddt]).each do |milestone|
+          @query.milestones.where('milestones.milestone_effective_date' =>
+                                  @calendar.startdt..@calendar.enddt).each do |milestone|
             milestones << {:name => milestone.name,
                            :url => url_for(:controller => :milestones,
                                            :action => :show,
                                            :id => milestone.id),
+                           :week => milestone.milestone_effective_date.cweek,
                            :day => milestone.milestone_effective_date.day}
           end
           response.body += view.render(:partial => 'hooks/calendars/milestones',

@@ -1,22 +1,14 @@
 <script language="javascript">
-  function AddMilestoneToDay(milestoneName, milestoneUrl, day)
+  function AddMilestoneToDay(milestoneName, milestoneUrl, day, week)
   {
     var cellElement = null;
-    var dayOneFound = false;
-    var elements = document.getElementsByTagName("*");
-    for (var i = 0; (cellElement == null) && (i < elements.length); i++)
+    var weekElement = $('.cal').find('td.week-number').filter(':contains("' + week + '")').first();
+    if (weekElement)
     {
-      if (elements[i].className == "day-num")
+      var dayElement = weekElement.parent().find('p.day-num').filter(':contains("' + day + '")').first();
+      if (dayElement)
       {
-        var oneDay = parseInt(elements[i].childNodes[0].nodeValue);
-        if ((!dayOneFound) && (oneDay == 1))
-        {
-          dayOneFound = true;
-        }
-        if (dayOneFound && (oneDay == day))
-        {
-          cellElement = elements[i].parentNode;
-        }
+        cellElement = dayElement.parent();
       }
     }
     if (cellElement != null)
@@ -27,14 +19,13 @@
       var milestone = document.createElement("span");
       milestone.className = "icon icon-milestone calendar-milestone";
       milestone.appendChild(link);
-      cellElement.appendChild(milestone);
+      cellElement.append(milestone);
     }
   }
-  <%- if ((!(milestones.nil?)) and (milestones.any?)) -%>
+  <%- if milestones and milestones.any? -%>
     <%- milestones.each do |milestone| -%>
-      AddMilestoneToDay("<%= milestone[:name] %>",
-                        "<%= milestone[:url] %>",
-                        <%= milestone[:day] %>);
+      AddMilestoneToDay("<%= milestone[:name] %>", "<%= milestone[:url] %>",
+                        <%= milestone[:day] %>, <%= milestone[:week] %>);
     <%- end -%>
   <%- end -%>
 </script>
