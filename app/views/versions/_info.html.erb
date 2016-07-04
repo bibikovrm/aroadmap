@@ -112,7 +112,7 @@
       <td class="checkbox"><%= check_box_tag('ids[]', issue.id) %></td>
       <td style="text-align: left;">
         <div class="tooltip" align="left">
-          <%= tab %>
+          <%= raw(tab) %>
           <font color="<%= color %>"><%= begin_strike %>
             <%= link_to_issue(issue, :project => (@project != issue.project)) %>
           <%= end_strike %></font>
