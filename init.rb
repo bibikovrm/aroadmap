@@ -36,7 +36,7 @@ Redmine::Plugin.register :advanced_roadmap do
   author 'Emilio González Montaña'
   author_url 'http://ociotec.com'
   description 'This is a plugin for Redmine that is used to show more information inside the Roadmap page and implements the milestones featuring.'
-  version '0.10.2'
+  version '0.11.0'
   permission :manage_milestones, {:milestones => [:new, :create, :edit, :update, :destroy]}
   requires_redmine :version_or_higher => '3.0.0'
 
@@ -51,6 +51,8 @@ Redmine::Plugin.register :advanced_roadmap do
                         'ratio_bad' => '1.2',
                         'color_bad' => 'orange',
                         'ratio_very_bad' => '1.5',
-                        'color_very_bad' => 'red'},
+                        'color_very_bad' => 'red',
+                        'milestone_label' => '',
+                        'milestone_plural_label' => ''},
            :partial => 'settings/advanced_roadmap_settings'
 end

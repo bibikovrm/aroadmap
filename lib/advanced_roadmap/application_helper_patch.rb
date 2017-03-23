@@ -23,10 +23,10 @@ module AdvancedRoadmap
         end
 
         def color_by_ratio(ratio)
-          color = ""
-          color = Setting.plugin_advanced_roadmap['color_good'] if ratio <= Setting.plugin_advanced_roadmap['ratio_good'].to_f
-          color = Setting.plugin_advanced_roadmap['color_bad'] if ratio >= Setting.plugin_advanced_roadmap['ratio_bad'].to_f
-          color = Setting.plugin_advanced_roadmap['color_very_bad'] if ratio >= Setting.plugin_advanced_roadmap['ratio_very_bad'].to_f
+          color = ''
+          color = AdvancedRoadmap::Setting.color_good if ratio <= AdvancedRoadmap::Setting.ratio_good
+          color = AdvancedRoadmap::Setting.color_bad if ratio >= AdvancedRoadmap::Setting.ratio_bad
+          color = AdvancedRoadmap::Setting.color_very_bad if ratio >= AdvancedRoadmap::Setting.ratio_very_bad
           return(color)
         end
   
@@ -48,7 +48,15 @@ module AdvancedRoadmap
                     :id => 'total_graph_image',
                     :onclick => "image = document.getElementById('total_graph_image'); if (image.style.width == '#{big_width}px') { image.style.width = '#{small_width}px'; image.style.height = '#{small_height}px'; } else { image.style.width = '#{big_width}px'; image.style.height = '#{big_height}px'; }"))
         end
-  
+
+        def label_milestone
+          AdvancedRoadmap::Setting.milestone_label || l(:label_milestone)
+        end
+
+        def label_milestone_plural
+          AdvancedRoadmap::Setting.milestone_plural_label || l(:label_milestone_plural)
+        end
+
       end
     end
   end

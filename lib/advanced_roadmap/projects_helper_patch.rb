@@ -19,7 +19,8 @@ module AdvancedRoadmap
                               :partial => 'projects/settings/versions', :label => :label_version_plural})
           if index
             tabs.insert(index, {:name => 'milestones', :action => :manage_milestones,
-                                :partial => 'projects/settings/milestones', :label => :label_milestone_plural})
+                                :partial => 'projects/settings/milestones',
+                                :label => :label_milestone_plural})
             tabs.select {|tab| User.current.allowed_to?(tab[:action], @project)}
           end
           return(tabs)

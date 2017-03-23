@@ -45,4 +45,16 @@
   <%= text_field_tag('settings[color_very_bad]', @settings['color_very_bad'] || defaults['color_very_bad']) %>
 </p>
 
+<p>
+  <label><%= l(:label_setting_milestone_label) %>:</label>
+  <%= text_field_tag('settings[milestone_label]', @settings['milestone_label'] || defaults['milestone_label']) %>
+  <em><%= l(:label_setting_leave_emtpy_for_default) %></em>
+</p>
+
+<p>
+  <label><%= l(:label_setting_milestone_plural_label) %>:</label>
+  <%= text_field_tag('settings[milestone_plural_label]', @settings['milestone_plural_label'] || defaults['milestone_plural_label']) %>
+  <em><%= l(:label_setting_leave_emtpy_for_default) %></em>
+</p>
+
 <%= render :partial => 'common/advanced_roadmap_footer' %>

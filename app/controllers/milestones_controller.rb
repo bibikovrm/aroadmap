@@ -110,7 +110,7 @@ class MilestonesController < ApplicationController
     @milestone.destroy
     redirect_to :controller => :projects, :action => :settings, :tab => 'milestones', :id => @project
   rescue
-    flash[:error] = l(:notice_unable_delete_milestone)
+    flash[:error] = l(:notice_unable_delete_milestone, :milestone_label => milestone_label)
     redirect_to :controller => :projects, :action => :settings, :tab => 'milestones', :id => @project
   end
 

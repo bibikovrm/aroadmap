@@ -43,14 +43,14 @@ module AdvancedRoadmap
           case options[:format]
           when :html
             subject = view.content_tag('span', :class => 'icon icon-milestones') do
-              l(:label_milestone_plural)
+              label_milestone_plural
             end
             html_subject(options, subject, :css => 'milestones-label')
           when :image
-            image_subject(options, l(:label_milestone_plural))
+            image_subject(options, label_milestone_plural)
           when :pdf
             pdf_new_page?(options)
-            pdf_subject(options, l(:label_milestone_plural))
+            pdf_subject(options, label_milestone_plural)
           end
         end
 
