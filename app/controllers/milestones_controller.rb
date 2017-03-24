@@ -7,7 +7,7 @@
 #   * No derivates of this plugin (or partial) are allowed.
 # Take a look to licence.txt file at plugin root folder for further details.
 
-require 'advanced_roadmap/gruff/pie'
+require 'advanced_roadmap/gruff/pie' if Object.const_defined?(:Magick)
 
 class MilestonesController < ApplicationController
   
@@ -28,7 +28,7 @@ class MilestonesController < ApplicationController
   include CustomFieldsHelper
   include ProjectsHelper
   include VersionsHelper
-   
+
   def show
     projects = {}
     @milestone.versions.each do |version|
@@ -42,7 +42,7 @@ class MilestonesController < ApplicationController
     @more_than_one_project = (projects.length > 1)
     @totals = Version.calculate_totals(@milestone.versions)
   end
-  
+
   def new
     @projects = Project.all.sort { |a, b| a.name.downcase <=> b.name.downcase }
     @versions = @project.versions
@@ -50,7 +50,7 @@ class MilestonesController < ApplicationController
   rescue ActiveRecord::RecordNotFound
     render_404
   end
-  
+
   def create
     @milestone = @project.milestones.build(params[:milestone])
     @milestone.user_id = User.current.id
@@ -69,7 +69,7 @@ class MilestonesController < ApplicationController
   rescue ActiveRecord::RecordNotFound => e
     render_404
   end
-  
+
   def edit
     @projects = Project.all.sort { |a, b| a.name.downcase <=> b.name.downcase }
     @versions = @project.versions
@@ -115,22 +115,24 @@ class MilestonesController < ApplicationController
   end
 
   def total_graph
-    g = AdvancedRoadmap::Gruff::Pie.new(params[:size] || '500x400')
-    g.hide_title = true
-    g.theme = graph_theme
-    g.margins = 0
+    if Object.const_defined?(:Magick)
+      g = AdvancedRoadmap::Gruff::Pie.new(params[:size] || '500x400')
+      g.hide_title = true
+      g.theme = graph_theme
+      g.margins = 0
 
-    versions = params[:versions] || []
-    percentajes = params[:percentajes] || []
-    i = 0
-    while i < versions.size and i < percentajes.size
-      percentajes[i] = percentajes[i].to_f
-      g.data(versions[i], percentajes[i])
-      i += 1
+      versions = params[:versions] || []
+      percentajes = params[:percentajes] || []
+      i = 0
+      while i < versions.size and i < percentajes.size
+        percentajes[i] = percentajes[i].to_f
+        g.data(versions[i], percentajes[i])
+        i += 1
+      end
+
+      headers['Content-Type'] = 'image/png'
+      send_data(g.to_blob, :type => 'image/png', :disposition => 'inline')
     end
-
-    headers['Content-Type'] = 'image/png'
-    send_data(g.to_blob, :type => 'image/png', :disposition => 'inline')
   end
 
 private
