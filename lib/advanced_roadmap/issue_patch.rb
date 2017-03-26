@@ -43,7 +43,15 @@ module AdvancedRoadmap
         def estimated_hours
           super if User.current.allowed_to?(:view_issue_estimated_hours, self.project)
         end
-  
+
+        def safe_attribute?(attribute)
+          if attribute == 'estimated_hours'
+            User.current.allowed_to?(:view_issue_estimated_hours, self.project)
+          else
+            super(attribute)
+          end
+        end
+
       end
     end
   end
