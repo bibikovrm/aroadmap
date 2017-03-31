@@ -44,7 +44,7 @@ class MilestonesController < ApplicationController
   end
 
   def new
-    @projects = Project.all.sort { |a, b| a.name.downcase <=> b.name.downcase }
+    @projects = Project.active.sort { |a, b| a.name.downcase <=> b.name.downcase }
     @versions = @project.versions
     @milestone = Milestone.new
   rescue ActiveRecord::RecordNotFound
@@ -71,7 +71,7 @@ class MilestonesController < ApplicationController
   end
 
   def edit
-    @projects = Project.all.sort { |a, b| a.name.downcase <=> b.name.downcase }
+    @projects = Project.active.sort { |a, b| a.name.downcase <=> b.name.downcase }
     @versions = @project.versions
   end
 
