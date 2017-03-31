@@ -52,11 +52,19 @@ module AdvancedRoadmap
         end
 
         def label_milestone
-          AdvancedRoadmap::Setting.milestone_label || l(:label_milestone)
+          if AdvancedRoadmap::Setting.milestone_label.blank?
+            l(:label_milestone)
+          else
+            AdvancedRoadmap::Setting.milestone_label
+          end
         end
 
         def label_milestone_plural
-          AdvancedRoadmap::Setting.milestone_plural_label || l(:label_milestone_plural)
+          if AdvancedRoadmap::Setting.milestone_plural_label.blank?
+            l(:label_milestone_plural)
+          else
+            AdvancedRoadmap::Setting.milestone_plural_label
+          end
         end
 
       end
