@@ -12,7 +12,7 @@ module AdvancedRoadmap
     def self.included(base)
       base.class_eval do
 
-        #include ApplicationHelper
+        include ApplicationHelper
 
         def render_project_with_milestones(project, options={})
           render_object_row(project, options)
