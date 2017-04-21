@@ -12,6 +12,8 @@ module AdvancedRoadmap
     def self.included(base)
       base.class_eval do
 
+        #include ApplicationHelper
+
         def render_project_with_milestones(project, options={})
           render_object_row(project, options)
           increment_indent(options) do
