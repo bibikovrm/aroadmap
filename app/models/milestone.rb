@@ -61,4 +61,18 @@ class Milestone < ActiveRecord::Base
     super
   end
 
+  def self.estimated_due_date(totals)
+    estimated_due_date = nil
+    non_working_week_days = Setting.non_working_week_days.map{ |day| day.to_i % 7 }
+    if (non_working_week_days.count < 7)
+      days = (totals[:parallel_rest_hours] / 8.0).ceil
+      estimated_due_date = DateTime.now
+      while days > 1
+        days -= 1 unless non_working_week_days.include?(estimated_due_date.wday)
+        estimated_due_date += 1.days
+      end
+    end
+    return estimated_due_date
+  end
+
 end

@@ -64,6 +64,13 @@
               </tr>
             <%- end -%>
           <%- end -%>
+          <%- estimated_due_date = Milestone.estimated_due_date(@totals) -%>
+          <%- unless estimated_due_date.nil? -%>
+            <tr>
+              <td width="300px" align="right"><%= l(:label_estimated_due_date) %></td>
+              <td width="340px" class="total-hours"><%= format_date(estimated_due_date) %></td>
+            </tr>
+          <%- end -%>
         <%- end -%>
         </table>
       </td>

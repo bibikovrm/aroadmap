@@ -1,5 +1,6 @@
 es:
   label_click_to_enlarge_reduce: "Haga click para ampliar/reducir"
+  label_estimated_due_date: "Fecha fin estimada (hoy incluido)"
   label_estimated_speed: "Velocidad estimada"
   label_f_day: "%{value} día"
   label_f_day_plural: "%{value} días"
