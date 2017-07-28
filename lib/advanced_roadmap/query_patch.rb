@@ -28,16 +28,23 @@ module AdvancedRoadmap
         # Deprecated method from Rails 2.3.X.
         def self.merge_conditions(*conditions)
           segments = []
-
           conditions.each do |condition|
             unless condition.blank?
               sql = sanitize_sql(condition)
               segments << sql unless sql.blank?
             end
           end
-
           "(#{segments.join(') AND (')})" unless segments.empty?
         end
+
+        def available_totalable_columns_with_advanced_roadmap
+          columns = available_totalable_columns_without_advanced_roadmap
+          unless User.current.allowed_to?(:view_issue_estimated_hours, self.project)
+            columns.delete_if {|column| column.name == :estimated_hours}
+          end
+          return columns
+        end
+        alias_method_chain :available_totalable_columns, :advanced_roadmap
 
       end
     end
