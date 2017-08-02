@@ -51,13 +51,19 @@
 </div>
 
 <div id="roadmap">
-  <%= render :partial => 'versions/info', :locals => {:version => @version, :issues => @issues} %>
+  <%- if Redmine::VERSION::STRING < '3.4.0' -%>
+    <%= render :partial => 'versions/info', :locals => {:version => @version, :issues => @issues} %>
+    <%= context_menu issues_context_menu_path %>
+  <%- else -%>
+    <%= form_tag({}, :data => {:cm_url => issues_context_menu_path}) do -%>
+      <%= render :partial => 'versions/info', :locals => {:version => @version, :issues => @issues} %>
+    <% end %>
+    <%= context_menu %>
+  <%- end -%>
 </div>
 
 <%= call_hook :view_versions_show_bottom, :version => @version %>
 
 <% html_title @version.name %>
-
-<%= context_menu issues_context_menu_path %>
 
 <%= render :partial => 'common/advanced_roadmap_footer' %>
