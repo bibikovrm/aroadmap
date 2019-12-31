@@ -14,7 +14,8 @@ module AdvancedRoadmap
 
         include ApplicationHelper
 
-        def render_project_with_milestones(project, options={})
+        alias_method :render_project_without_advanced_roadmap, :render_project
+        def render_project(project, options={})
           render_object_row(project, options)
           increment_indent(options) do
             # render project milestones.
@@ -39,7 +40,6 @@ module AdvancedRoadmap
             end
           end
         end
-        alias_method_chain :render_project, :milestones
 
         def subject_for_milestones_label(options)
           case options[:format]

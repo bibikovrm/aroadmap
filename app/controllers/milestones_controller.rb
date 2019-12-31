@@ -14,13 +14,13 @@ class MilestonesController < ApplicationController
   menu_item :roadmap
   model_object Milestone
 
-  before_filter :find_model_object,
+  before_action :find_model_object,
                 :only => [:show, :edit, :update, :destroy]
-  before_filter :find_project_from_association,
+  before_action :find_project_from_association,
                 :only => [:show, :edit, :update, :destroy]
-  before_filter :find_project_by_project_id,
+  before_action :find_project_by_project_id,
                 :only => [:new, :create]
-  before_filter :authorize, :except => [:show, :total_graph]
+  before_action :authorize, :except => [:show, :total_graph]
 
   helper :custom_fields
   helper :projects
