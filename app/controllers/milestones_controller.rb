@@ -7,7 +7,7 @@
 #   * No derivates of this plugin (or partial) are allowed.
 # Take a look to licence.txt file at plugin root folder for further details.
 
-require 'advanced_roadmap/gruff/pie' if Object.const_defined?(:Magick)
+require 'gruff/pie' if Object.const_defined?(:Magick)
 
 class MilestonesController < ApplicationController
   
@@ -115,7 +115,7 @@ class MilestonesController < ApplicationController
 
   def total_graph
     if Object.const_defined?(:Magick)
-      g = AdvancedRoadmap::Gruff::Pie.new(params[:size] || '500x400')
+      g = Gruff::Pie.new(params[:size] || '500x400')
       g.hide_title = true
       g.theme = graph_theme
       g.margins = 0
