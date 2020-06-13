@@ -7,11 +7,6 @@
 #   * No derivates of this plugin (or partial) are allowed.
 # Take a look to licence.txt file at plugin root folder for further details.
 
-# This plugin should be reloaded in development mode.
-if (Rails.env == 'development')
-  ActiveSupport::Dependencies.autoload_once_paths.reject!{|x| x =~ /^#{Regexp.escape(File.dirname(__FILE__))}/}
-end
-
 require 'redmine'
 require 'rubygems'
 require 'gravatar'
