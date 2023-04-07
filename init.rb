@@ -19,7 +19,7 @@ Redmine::I18n.send(:include, AdvancedRoadmap::RedmineI18nPatch)
 Version.send(:include, AdvancedRoadmap::VersionPatch)
 VersionsController.send(:include, AdvancedRoadmap::VersionsControllerPatch)
 
-require_dependency 'advanced_roadmap/view_hooks'
+require_dependency File.dirname(__FILE__) + '/lib/advanced_roadmap/view_hooks'
 
 Redmine::Plugin.register :advanced_roadmap do
   name 'Advanced roadmap & milestones plugin'
