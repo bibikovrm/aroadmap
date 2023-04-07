@@ -7,10 +7,6 @@
 #   * No derivates of this plugin (or partial) are allowed.
 # Take a look to licence.txt file at plugin root folder for further details.
 
-require 'redmine'
-require 'rubygems'
-require 'gravatar'
-
 ApplicationHelper.send(:include, AdvancedRoadmap::ApplicationHelperPatch)
 CalendarsController.send(:include, AdvancedRoadmap::CalendarsControllerPatch)
 Issue.send(:include, AdvancedRoadmap::IssuePatch)
